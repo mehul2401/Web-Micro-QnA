@@ -15,6 +15,7 @@ Guiding QnA ->
 
 https://pointsbet.com/_location API to identify user’s location based on their public IP address.
 
+
 3. Where is the starting point of the application? How does the layout look like & how is the layout created?
 
 Orchestrator is the first thing to load on the page and responsible for loading and starting the application. The layout seems to be created using component injections. The layout part of the question is not very clear.
