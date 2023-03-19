@@ -1,114 +1,113 @@
 Guiding QnA ->
 
-How does the Orchestrator work?
-1. It is the first thing to load on the page and responsible for loading and starting the application.
-2. Fetches the appropriate manifest based on the user's location and if not found or in case of any failure, it defaults to DEFAULT_MANIFEST set during the build process.
-3. Initializes the application based on the selected manifest which basically involves loading assets using AssetManager.
-Handles the updates to manifest if any.
-4. Maps and caches service manifests.
-5. Once all assets are loaded and processed, it hides the splash screen and triggers the provided initialisationHandler resulting in mounting the application on to the DOM.
-6. This way it builds and renders the application.
+1. How does the Orchestrator work?
+
+* It is the first thing to load on the page and responsible for loading and starting the application.
+* Fetches the appropriate manifest based on the user's location and if not found or in case of any failure, it defaults to DEFAULT_MANIFEST set during the build process.
+* Initializes the application based on the selected manifest which basically involves loading assets using AssetManager.
+* Handles the updates to manifest if any.
+* Maps and caches service manifests.
+* Once all assets are loaded and processed, it hides the splash screen and triggers the provided initialisationHandler resulting in mounting the application on to the DOM.
+* This way it builds and renders the application.
 
 
-What is the first method being called by the Orchestrator when the app is loaded?
+2. What is the first method being called by the Orchestrator when the app is loaded?
 
 https://pointsbet.com/_location API to identify user’s location based on their public IP address.
 
+3. Where is the starting point of the application? How does the layout look like & how is the layout created?
 
-Where is the starting point of the application? How does the layout look like & how is the layout created?
-
-Orchestrator is the first thing to load on the page and responsible for loading and starting the application. The layout part of the question is not very clear.
-
-
-Where is the global routing table located & how does it work?
-
-Seems like there is a Routing.tsx file in projects/app/src/components/Routing folder where the entire routing logic is written and there is a Router.tsx file in projects/common/src/routing folder where WebRouter and MobileRouter components are defined which are used for the purpose of routing in web and mobile respectively. But still I would require a practical walkthrough of this to understand routing completely.
+Orchestrator is the first thing to load on the page and responsible for loading and starting the application. The layout seems to be created using component injections. The layout part of the question is not very clear.
 
 
-What is the difference between Service Manifest & Application Manifest?
+4. Where is the global routing table located & how does it work?
+
+Seems like there is a Routing.tsx file in projects/app/src/components/Routing folder where the entire routing logic is written and there is a Router.tsx file in projects/common/src/routing folder where WebRouter and MobileRouter components are defined which are used for the purpose of routing in web and mobile respectively. And each service has it’s own routing specified in the index.tsx file. But still I would require a practical walkthrough of this to understand routing completely.
+
+
+5. What is the difference between Service Manifest & Application Manifest?
 
 Service manifest is a JS object which describes all of the stuff in the service and how it is organized whereas application manifest is a JSON file listing the services that should be downloaded to run the application, the features that should be enabled from those services, and any configuration for the service (e.g. inactivity timeout duration), or more global application-level config. Each service has its own service manifest whereas each region has its own application manifest.
 
-How are services loaded and enabled?
+
+6. How are services loaded and enabled?
 
 Orchestrator is responsible for fetching the relevant application manifest, then loading all of the individual services listed therein and initiating the application render.
 
 
-When visiting non-existent routes (eg. pointsbet.com.au/non-existing), how does the app implement redirect?
+7. When visiting non-existent routes (eg. pointsbet.com.au/non-existing), how does the app implement redirect?
 
 We are using Routing component for managing the routes which has a switch statement wherein if the user tries to visit a non-existent route then he is redirected to the route which is defined as - <Route key="page-not-found" render={Error404} path="*" /> . Which means that the user is redirected to a page which renders the Error404 component for any route other than the ones defined.
 
 
-How does component injection work? Behind the scenes, how are injected components imported?
+8. How does component injection work? Behind the scenes, how are injected components imported?
 
 It feels like this is something which helps us in forming the required layout in this micro frontend architecture. Small independent components can be injected into a common host to form one bigger component. This is what I need to get a walkthrough of as it is not very clear from the documentation.
 
 
-How are service manifests combined?
+9. How are service manifests combined?
 
 Not clear from the documentation.
 
 
-How are service bundle js files created? during build or run-time? where are they deployed (for mobile and web apps)?
+10. How are service bundle js files created? during build or run-time? where are they deployed (for mobile and web apps)?
 
 Service bundles are created when we run yarn build during the build time but don’t know where they are deployed. Like generally when we run build command then a dist folder is created which has all the bundles in a bundle.js file. Not very clear from the documentation.
 
 
-How is the index.html file generated?
+11. How is the index.html file generated?
 
 There seems to be a container folder inside the target folder which generates the index.html file. Also I see an index.html file in the dist folder which is inside the target/.output folder. But I would like to know more about it as I am not able to get it completely from the documentation.
 
 
-How are feature toggle JSON config generated, and how does it enable/disable features?
-How to turn on (off) toggles in Storage Explorer
-How does it enable/disable features?
-Inline feature toggling
-How many ways are there to toggle on and off a feature?
+12. How are feature toggle JSON config generated, and how does it enable/disable features?
+    * How to turn on (off) toggles in Storage Explorer
+    * How does it enable/disable features?
+    * Inline feature toggling
+    * How many ways are there to toggle on and off a feature?
 
-Not clear from the documentation.
+Not clear from the documentation. There seems to be an Azure Storage explorer though from where we can turn a feature on or off by changing values to true and false respectively.
 
 
-How does Storybook work? How is it built?
+13. How does Storybook work? How is it built?
 
-Storybook is a UI tool for building and viewing UI components independently. It allows you to visually test and interact with your components in an isolated environment. A story captures the rendered state of a UI component. A component can contain multiple stories to describe the different states it can support. 
+Storybook is a UI tool for building and viewing UI components independently. It allows you to visually test and interact with your components in an isolated environment. A story captures the rendered state of a UI component. A component can contain multiple stories to describe the different states it can support. 
 Storybook for web micro has been configured to run:
-filtered (only compile stories from a certain service or services)
+* filtered (only compile stories from a certain service or services)
 OR
-unfiltered (generates all stories in the project)
+* unfiltered (generates all stories in the project)
 Commands to launch storybook -
 Unfiltered : yarn storybook --launch or yarn storybook -l
-Filtered : yarn storybook --only common auth ancillary --launch or yarn storybook -o common auth ancillary -l 
-Generate/Launch full Storybook : yarn storybook and yarn storybook -l
+	Filtered : yarn storybook --only common auth ancillary --launch or yarn storybook -o common auth ancillary -l 
 
-Our yarn storybook command calls the target/scripts/storybook.ts script which calls three sequences:
-storybookPublic
-Copies all static elements from the public/_static folder and drops it in the storybook static path
-storybookFilter
-Creates a stories.js file used by the Storybook build. This file outlines which story files to build if we added any filter options or to run it unfiltered
-storybookBuild
-Runs the shell command to build or launch Storybook. Storybook CLI options can be added in the command variable
+	Generate/Launch full Storybook : yarn storybook and yarn storybook -l
 
-What is the difference between setting and feature toggle? When should we use feature settings? When should we use feature toggles? Pros and cons of each approach?
+	Our yarn storybook command calls the target/scripts/storybook.ts script which calls three sequences
+1. storybookPublicCopies all static elements from the public/_static folder and drops it in the storybook static path
+2. storybookFilterCreates a stories.js file used by the Storybook build. This file outlines which story files to build if we added any filter options or to run it unfiltered
+3. storybookBuildRuns the shell command to build or launch Storybook. Storybook CLI options can be added in the command variable
+
+
+14. What is the difference between setting and feature toggle? When should we use feature settings? When should we use feature toggles? Pros and cons of each approach?
 
 There is something related to features and settings in application.region.json files in target/.output/_manifest folder. Feels like that is how we are controlling the feature and settings toggle for particular services. Also there is some blob storage from where this toggling can be achieved. Though I would require a proper understanding of this via discussion.
 
 
-How can you define different values for a setting based on the environment (dev, uat, prod)?
+15. How can you define different values for a setting based on the environment (dev, uat, prod)?
 
 Not clear from the documentation.
 
 
-Where is the entry point of the application? How is the main layout created? The header, the footer, the left menu, the right menu, the content area, etc. how are they put together when the app renders?
+16. Where is the entry point of the application? How is the main layout created? The header, the footer, the left menu, the right menu, the content area, etc. how are they put together when the app renders?
 
-Orchestrator is the entry point of the application and the main layout is created using component injections.
-
-
-How is the bundle (.js) file of each service created and distributed?
-
-Not clear from the documentation.
+Orchestrator is the entry point of the application and the main layout is created using component injections. Not very clear from the documentation.
 
 
-In regions where casinos are not available how is the web-micro built, how are casino games bundles excluded from the build process?
+17. How is the bundle (.js) file of each service created and distributed?
 
 Not clear from the documentation.
 
+
+18. In regions where casinos are not available how is the web-micro built, how are casino games bundles excluded from the build process?
+
+Not clear from the documentation. It seems that the orchestrator will not build the casino games bundles if casinos are not available in that region. Because it selects the relevant application manifests which are region dependant.
